@@ -30,6 +30,8 @@ dependencies:
   json_serializable: ^3.2.5
   async: ^2.4.0
   dio: ^3.0.9
+  rxdart: ^0.21.0
+  dartin: ^0.1.5
 
 dev_dependencies:
   flutter_test:
