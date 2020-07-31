@@ -8,6 +8,6 @@ class HomeModelManager{
 
   void feed()=>homeModel.feed()
   .listen((event) {
-    
+
   });
 }

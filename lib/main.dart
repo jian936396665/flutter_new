@@ -110,11 +110,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   /// 首页切换
   _setCurrent(int current) {
-    if (_currentPageIndex != current) {
-      _currentPageIndex = current;
       _pageController.animateToPage(current,
           duration: Duration(microseconds: 300), curve: Curves.ease);
-    }
   }
 
   _onPageChange(int index) {
