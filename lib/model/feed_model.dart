@@ -27,8 +27,10 @@ class FeedModel{
 
 class Content{
   Cover cover;
+  String moment_content;
   Content.fromJson(Map<String, dynamic> json){
     cover = new Cover.fromJson(json["cover"]);
+    moment_content = json["moment_content"];
   }
 }
 
