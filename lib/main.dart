@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_new/home/home_page_item.dart';
+import 'package:flutter_app_new/page/home_page.dart';
 import 'package:flutter_app_new/style/app_color.dart';
 import 'package:flutter_app_new/style/font_style.dart';
 
@@ -18,6 +20,7 @@ class MyApp extends StatelessWidget {
       SystemUiOverlayStyle systemUiOverlayStyle =
           SystemUiOverlayStyle(statusBarColor: Colors.transparent);
       SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+      LogUtil.init(isDebug: true);
     }
     return MaterialApp(
       title: 'Flutter Demo',
@@ -25,13 +28,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MainPage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class MainPage extends StatefulWidget {
+  MainPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
@@ -39,7 +42,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MainPage> {
   int _currentPageIndex = 0;
   var _pageController = new PageController(initialPage: 0);
   final double _icon_size = 22;
@@ -67,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPageChanged: _onPageChange,
         controller: _pageController,
         children: <Widget>[
-          new Text("首页"),
+          new HomePage(),
           new Text("商城"),
           new Text("消息"),
           new Text("我的")
