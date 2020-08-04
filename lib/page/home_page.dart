@@ -4,7 +4,6 @@ import 'package:flutter_app_new/items/feed_item.dart';
 import 'package:flutter_app_new/model/feed_model.dart';
 import 'package:flutter_app_new/model_manager/home_model_manager.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -15,39 +14,63 @@ class HomePage extends StatefulWidget {
   }
 }
 
-class HomePageState extends State {
+class HomePageState extends State with AutomaticKeepAliveClientMixin{
   var _scrollController = new ScrollController(initialScrollOffset: 0);
   List<FeedModel> data = new List();
+  int page = 1;
 
   @override
   void initState() {
     super.initState();
-    _getFeedData();
+    _getFeedData(page);
+    _scrollController.addListener(() {
+      var px = _scrollController.position.pixels;
+      if (px == _scrollController.position.maxScrollExtent) {
+        _onLoadMore();
+      }
+    });
   }
 
-  void _getFeedData() async {
-    FeedDataModel model = await HomeModelManager.getCustomerList(1);
+  void _getFeedData(int page) async {
+    FeedDataModel model = await HomeModelManager.getCustomerList(page);
     setState(() {
-      data = model.data;
+      data.addAll(model.data);
     });
     LogUtil.e(data, tag: "_getFeedData");
   }
 
   @override
   Widget build(BuildContext context) {
-    return StaggeredGridView.countBuilder(
-      controller: _scrollController,
-      padding: EdgeInsets.all(8),
-      crossAxisCount: 4,
-      itemCount: data.length,
-      itemBuilder: (BuildContext context, int index) {
-        FeedModel item = data[index];
-        return FeedItems(item);
-      },
-      staggeredTileBuilder: (int index) =>
-          new StaggeredTile.count(2, index == 0 ? 1.5 : 2),
-      mainAxisSpacing: 8.0,
-      crossAxisSpacing: 8.0,
+    return RefreshIndicator(
+      child: StaggeredGridView.countBuilder(
+        controller: _scrollController,
+        padding: EdgeInsets.all(8),
+        crossAxisCount: 4,
+        itemCount: data.length,
+        itemBuilder: (BuildContext context, int index) {
+          FeedModel item = data[index];
+          return FeedItems(item);
+        },
+        staggeredTileBuilder: (int index) =>
+            new StaggeredTile.count(2, index == 0 ? 1.5 : 2),
+        mainAxisSpacing: 8.0,
+        crossAxisSpacing: 8.0,
+      ),
+      onRefresh: _onRefresh,
     );
   }
+
+  void _onLoadMore() {
+    page++;
+    _getFeedData(page);
+  }
+
+  Future<void> _onRefresh(){
+    page = 1;
+    _getFeedData(page);
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+
 }
