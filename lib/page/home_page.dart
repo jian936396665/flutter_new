@@ -52,7 +52,7 @@ class HomePageState extends State with AutomaticKeepAliveClientMixin{
           return FeedItems(item);
         },
         staggeredTileBuilder: (int index) =>
-            new StaggeredTile.count(2, index == 0 ? 1.5 : 2),
+            new StaggeredTile.fit(2),
         mainAxisSpacing: 8.0,
         crossAxisSpacing: 8.0,
       ),
