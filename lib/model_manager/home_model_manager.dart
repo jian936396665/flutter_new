@@ -8,8 +8,6 @@ class HomeModelManager with ChangeNotifier {
 
   static Future<FeedDataModel> getCustomerList(
       int page) async {
-
-    PrintUtil.selfErrorCatch("page::"+page.toString());
     var result = await Http.fetch(
         "feed",
         params: {
@@ -22,7 +20,6 @@ class HomeModelManager with ChangeNotifier {
       } else {
         // 请求结果不等于200的情况
         Fluttertoast.showToast(msg: result['message']);
-        PrintUtil.e({'result::': result});
       }
     }
     return null;

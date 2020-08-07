@@ -1,12 +1,12 @@
 import 'dart:io';
-
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_new/home/home_page_item.dart';
-import 'package:flutter_app_new/page/home_page.dart';
-import 'package:flutter_app_new/style/app_color.dart';
-import 'package:flutter_app_new/style/font_style.dart';
+import 'package:flutter_app_new/navigatormanager.dart';
+import 'package:flutter_app_new/page/main_page.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import 'model_manager/login_model_manager.dart';
 
 void main() {
   runApp(MyApp());
@@ -28,98 +28,143 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MainPage(title: 'Flutter Demo Home Page'),
+      home: CodeLoginPage(),
+      routes: <String, WidgetBuilder>{
+//        '/page': (context) => MainPage(title: '首页'),
+      },
+      navigatorKey: RouteManager.navigatorKey,
+      navigatorObservers: [NavigatorManager.getInstance()],
     );
   }
 }
 
-class MainPage extends StatefulWidget {
-  MainPage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
+class CodeLoginPage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<StatefulWidget> createState() {
+    return _CodeLoginState();
+  }
 }
 
-class _MyHomePageState extends State<MainPage> {
-  int _currentPageIndex = 0;
-  var _pageController = new PageController(initialPage: 0);
-  final double _icon_size = 22;
-  final _titles = <String>['首页', '商城', '消息', '我的'];
-  final _select_icon = <String>[
-    'images/ic_main_navigation_home_selected.png',
-    'images/ic_main_navigation_goods_selected.png',
-    'images/ic_main_navigation_msg_selected.png',
-    'images/ic_main_navigation_mine_selected.png'
-  ];
-  final _unselect_icon = <String>[
-    'images/ic_main_navigation_home_unselected.png',
-    'images/ic_main_navigation_goods_unselected.png',
-    'images/ic_main_navigation_msg_unselected.png',
-    'images/ic_main_navigation_mine_unselected.png'
-  ];
+class _CodeLoginState extends State {
+  TextEditingController userEditController = new TextEditingController();
+
+  @override
+  void initState() {
+//    userEditController.addListener(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+    return new Scaffold(
+      body: new Align(
+        alignment: Alignment.center,
+        child: _buildContent(),
       ),
-      body: PageView(
-        onPageChanged: _onPageChange,
-        controller: _pageController,
-        children: <Widget>[
-          new HomePage(),
-          new Text("商城"),
-          new Text("消息"),
-          new Text("我的")
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: AppColor.rcNormalColor,
-        selectedItemColor: AppColor.rcMainColor,
-        selectedFontSize: AppText.normalSize,
-        unselectedFontSize: AppText.normalSize,
-        type: BottomNavigationBarType.fixed,
-        items: _build_bottom_items(),
-        currentIndex: _currentPageIndex,
-        onTap: (int index) {
-          setState(() {
-            _currentPageIndex = index;
-          });
-          _setCurrent(index);
-        },
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
-  ///导航
-  List<BottomNavigationBarItem> _build_bottom_items() {
-    var itemList = List<BottomNavigationBarItem>();
-    for (int i = 0; i < _titles.length; i++) {
-      var icon = i == _currentPageIndex ? _select_icon[i] : _unselect_icon[i];
-      var item = BottomNavigationBarItem(
-          icon: Image.asset(
-            icon,
-            width: _icon_size,
-            height: _icon_size,
+  Widget _buildContent() {
+    return Container(
+      margin: EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(
+              top: 66,
+              left: 16,
+              bottom: 32,
+            ),
+            child: Text(
+              'Login',
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
           ),
-          title: Text(_titles[i]));
-      itemList.add(item);
+          Container(
+            margin: EdgeInsets.symmetric(
+              vertical: 4,
+              horizontal: 16,
+            ),
+            child: TextField(
+              keyboardType: TextInputType.number,
+              maxLength: 11,
+              controller: userEditController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: '请输入手机号',
+                prefixIcon: Icon(Icons.verified_user),
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(
+              vertical: 4,
+              horizontal: 16,
+            ),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: RaisedButton(
+                disabledColor: Colors.grey,
+                color: Colors.blue,
+                onPressed: () {
+                  _sendCode();
+                },
+                child: Text(
+                  '请输入验证码',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 16),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ButtonTheme(
+                  minWidth: 268,
+                  child: RaisedButton(
+                    onPressed: () {
+                      _login();
+                    },
+                    child: Text(
+                      '登录',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  ///发送验证码
+  _sendCode() {
+    RegExp exp = RegExp(
+        r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
+    if(!exp.hasMatch(userEditController.text)){
+      Fluttertoast.showToast(msg: "请输入正确的手机号！");
+      return;
     }
-    return itemList;
+    LoginModelManager.getLoginCode(userEditController.text);
   }
 
-  /// 首页切换
-  _setCurrent(int current) {
-      _pageController.animateToPage(current,
-          duration: Duration(microseconds: 300), curve: Curves.ease);
-  }
-
-  _onPageChange(int index) {
-    setState(() {
-      _currentPageIndex = index;
-    });
+  ///登录
+  _login() {
+    Navigator.pop(context);
+    Navigator.push(
+        context, new MaterialPageRoute(builder: (context) => MainPage(title: "首页",)));
   }
 }
