@@ -36,7 +36,6 @@ class HomePageState extends State with AutomaticKeepAliveClientMixin{
     setState(() {
       data.addAll(model.data);
     });
-    LogUtil.e(data, tag: "_getFeedData");
   }
 
   @override

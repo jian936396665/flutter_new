@@ -1,11 +1,14 @@
 import 'dart:io';
+
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_new/navigatormanager.dart';
 import 'package:flutter_app_new/page/main_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'model/code_login_model.dart';
 import 'model_manager/login_model_manager.dart';
 
 void main() {
@@ -45,12 +48,26 @@ class CodeLoginPage extends StatefulWidget {
   }
 }
 
+///登录
 class _CodeLoginState extends State {
   TextEditingController userEditController = new TextEditingController();
+  TextEditingController userCodeController = new TextEditingController();
 
   @override
-  void initState() {
-//    userEditController.addListener(() {});
+  Future<void> initState() {
+    Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+    prefs.then((value) => {
+          if (value.getString("login").isNotEmpty)
+            {
+              Navigator.pop(context),
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => MainPage(
+                            title: "首页",
+                          )))
+            }
+        });
   }
 
   @override
@@ -94,6 +111,22 @@ class _CodeLoginState extends State {
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: '请输入手机号',
+                prefixIcon: Icon(Icons.verified_user),
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(
+              vertical: 4,
+              horizontal: 16,
+            ),
+            child: TextField(
+              keyboardType: TextInputType.text,
+              maxLength: 11,
+              controller: userCodeController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: '请输入验证码',
                 prefixIcon: Icon(Icons.verified_user),
               ),
             ),
@@ -154,7 +187,7 @@ class _CodeLoginState extends State {
   _sendCode() {
     RegExp exp = RegExp(
         r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
-    if(!exp.hasMatch(userEditController.text)){
+    if (!exp.hasMatch(userEditController.text)) {
       Fluttertoast.showToast(msg: "请输入正确的手机号！");
       return;
     }
@@ -162,9 +195,26 @@ class _CodeLoginState extends State {
   }
 
   ///登录
-  _login() {
+  _login() async {
+    if (userEditController.text.isEmpty) {
+      Fluttertoast.showToast(msg: "请输入用户名");
+      return;
+    }
+    if (userCodeController.text.isEmpty) {
+      Fluttertoast.showToast(msg: "请输入验证码");
+      return;
+    }
+    CodeLoginModel loginModel = await LoginModelManager.login(
+        userEditController.text, userCodeController.text);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String spLogin = JsonUtil.encodeObj(loginModel);
+    prefs.setString("login", spLogin);
     Navigator.pop(context);
     Navigator.push(
-        context, new MaterialPageRoute(builder: (context) => MainPage(title: "首页",)));
+        context,
+        new MaterialPageRoute(
+            builder: (context) => MainPage(
+                  title: "首页",
+                )));
   }
 }
