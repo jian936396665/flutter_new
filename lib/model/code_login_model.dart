@@ -8,8 +8,8 @@ class CodeLoginModel {
     Map<String, dynamic> loginMap = json["data"];
     token = loginMap["token"];
     is_new_user = loginMap["is_new_user"];
-    user_id = loginMap["user_id"];
-    im_password = loginMap["im_password"];
+    user_id = loginMap["user_id"].toString();
+    im_password = loginMap["im_password"].toString();
   }
 
   Map<String, dynamic> toJson() {

@@ -33,7 +33,8 @@ class LoginModelManager{
         },type: "post");
     if (result != null) {
       if (200 == result['code']) {
-        return CodeLoginModel.fromJson(result);
+        CodeLoginModel model = new CodeLoginModel.fromJson(new Map<String, dynamic>.from(result));
+        return model;
       } else {
         Fluttertoast.showToast(msg: result['message']);
       }

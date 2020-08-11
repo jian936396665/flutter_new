@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_new/navigatormanager.dart';
 import 'package:flutter_app_new/page/main_page.dart';
+import 'package:flutter_app_new/widget/timer_text.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -52,6 +53,9 @@ class CodeLoginPage extends StatefulWidget {
 class _CodeLoginState extends State {
   TextEditingController userEditController = new TextEditingController();
   TextEditingController userCodeController = new TextEditingController();
+  bool isCanSendCode = true;
+
+  final timerKey = new GlobalKey();
 
   @override
   Future<void> initState() {
@@ -68,6 +72,13 @@ class _CodeLoginState extends State {
                           )))
             }
         });
+
+    userEditController.addListener(() {
+      setState(() {
+        isCanSendCode = userEditController.text.isNotEmpty;
+        timerKey.currentState.initState();
+      });
+    });
   }
 
   @override
@@ -138,19 +149,10 @@ class _CodeLoginState extends State {
             ),
             child: Align(
               alignment: Alignment.centerRight,
-              child: RaisedButton(
-                disabledColor: Colors.grey,
-                color: Colors.blue,
-                onPressed: () {
-                  _sendCode();
-                },
-                child: Text(
-                  '请输入验证码',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.white,
-                  ),
-                ),
+              child: TimerText(
+                key: timerKey,
+                onTapCallback: _sendCode,
+                isEnable: isCanSendCode,
               ),
             ),
           ),
