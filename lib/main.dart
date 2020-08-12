@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app_new/navigatormanager.dart';
 import 'package:flutter_app_new/page/login_page.dart';
 import 'package:flutter_app_new/page/main_page.dart';
+import 'package:flutter_app_new/page/splash_page.dart';
 import 'package:flutter_app_new/widget/timer_text.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: CodeLoginPage(),
+      home: SplashPage(),
       routes: <String, WidgetBuilder>{
 //        '/page': (context) => MainPage(title: '首页'),
       },

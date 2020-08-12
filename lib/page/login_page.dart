@@ -25,20 +25,6 @@ class _CodeLoginState extends State {
 
   @override
   Future<void> initState() {
-    Future<SharedPreferences> prefs = SharedPreferences.getInstance();
-    prefs.then((value) => {
-      if (value.getString("login").isNotEmpty)
-        {
-          Navigator.pop(context),
-          Navigator.push(
-              context,
-              new MaterialPageRoute(
-                  builder: (context) => MainPage(
-                    title: "首页",
-                  )))
-        }
-    });
-
     userEditController.addListener(() {
       setState(() {
         isCanSendCode = userEditController.text.isNotEmpty;
