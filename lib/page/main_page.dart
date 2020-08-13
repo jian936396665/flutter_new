@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_new/style/app_color.dart';
 import 'package:flutter_app_new/style/font_style.dart';
 
-import 'home_page.dart';
+import 'main/goods_page.dart';
+import 'main/home_page.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key key, this.title}) : super(key: key);
@@ -42,7 +43,7 @@ class _MyHomePageState extends State<MainPage> {
         controller: _pageController,
         children: <Widget>[
           new HomePage(),
-          new Text("商城"),
+          new GoodsPage(),
           new Text("消息"),
           new Text("我的")
         ],

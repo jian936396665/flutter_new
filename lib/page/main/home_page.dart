@@ -1,5 +1,6 @@
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_new/helper/feed_dbhelper.dart';
 import 'package:flutter_app_new/items/feed_item.dart';
 import 'package:flutter_app_new/model/feed_model.dart';
 import 'package:flutter_app_new/model_manager/home_model_manager.dart';
@@ -36,6 +37,7 @@ class HomePageState extends State with AutomaticKeepAliveClientMixin{
     setState(() {
       data.addAll(model.data);
     });
+    FeedDbHelper.get().insert(data);
   }
 
   @override
@@ -71,5 +73,10 @@ class HomePageState extends State with AutomaticKeepAliveClientMixin{
 
   @override
   bool get wantKeepAlive => true;
+
+
+  void cacheHomeData(){
+
+  }
 
 }

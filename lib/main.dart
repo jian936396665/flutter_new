@@ -7,10 +7,12 @@ import 'package:flutter_app_new/navigatormanager.dart';
 import 'package:flutter_app_new/page/login_page.dart';
 import 'package:flutter_app_new/page/main_page.dart';
 import 'package:flutter_app_new/page/splash_page.dart';
+import 'package:flutter_app_new/util/database_helper.dart';
 import 'package:flutter_app_new/widget/timer_text.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'helper/feed_dbhelper.dart';
 import 'model/code_login_model.dart';
 import 'model_manager/login_model_manager.dart';
 
@@ -26,6 +28,7 @@ class MyApp extends StatelessWidget {
       SystemUiOverlayStyle systemUiOverlayStyle =
           SystemUiOverlayStyle(statusBarColor: Colors.transparent);
       SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+      //初始化日志
       LogUtil.init(isDebug: true);
     }
     return MaterialApp(
