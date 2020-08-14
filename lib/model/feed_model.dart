@@ -23,11 +23,15 @@ class FeedModel{
     }
   }
 
+  FeedModel(this.content);
 }
 
 class Content{
   Cover cover;
   String moment_content;
+
+  Content(this.cover, this.moment_content);
+
   Content.fromJson(Map<String, dynamic> json){
     cover = new Cover.fromJson(json["cover"]);
     moment_content = json["moment_content"];
@@ -36,6 +40,9 @@ class Content{
 
 class Cover{
   String thumbnail_url;
+
+  Cover(this.thumbnail_url);
+
   Cover.fromJson(Map<String, dynamic> json){
     thumbnail_url = json["thumbnail_url"];
   }

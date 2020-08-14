@@ -67,7 +67,7 @@ class DatabaseHelper extends IDbHelper{
     String path = join(databasesPath, dbName);
 
     Database db = await openDatabase(path);
-    List<Map<String, dynamic>> list = await db.rawQuery(sql);
+    List<Map<String, dynamic>> list = List.from(await db.rawQuery(sql));
     await db.close();
     return list;
   }

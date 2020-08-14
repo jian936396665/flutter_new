@@ -25,7 +25,7 @@ class FeedDbHelper{
 
   void insert(List<FeedModel> arg) {
     for(int i=0;i<arg.length;i++) {
-      String sql = "INSERT INTO $feed_table (content,image_url) VALUES('${arg[i].content}','${arg[i].content.cover.thumbnail_url}')";
+      String sql = "INSERT INTO $feed_table (content,image_url) VALUES('${arg[i].content.moment_content}','${arg[i].content.cover.thumbnail_url}')";
       _databaseHelper.insert(feed_dbname, sql);
     }
   }
@@ -39,7 +39,9 @@ class FeedDbHelper{
     List<Map<String, dynamic>> list = await _databaseHelper.query(feed_dbname, sql);
     List<FeedModel> newlist = new List();
     for(int i=0;i<list.length;i++){
-      FeedModel model = new FeedModel.fromJson(list[i]);
+      Cover cover = new Cover(list[i]["content"]);
+      Content content = new Content(cover, list[i]["image_url"]);
+      FeedModel model = new FeedModel(content);
       newlist.add(model);
     }
     return newlist;

@@ -59,20 +59,19 @@ class _SplashState extends State with SingleTickerProviderStateMixin{
   void onAnimalEnd() {
     Future<SharedPreferences> prefs = SharedPreferences.getInstance();
     prefs.then((value) => {
-          Navigator.pop(context),
           if (value.getString("login")!=null)
             {
-              Navigator.push(
+              Navigator.pushAndRemoveUntil(
                   context,
                   new MaterialPageRoute(
                       builder: (context) => MainPage(
                             title: "首页",
-                          )))
+                          )), (route) => route == null)
             }
           else
             {
-              Navigator.push(context,
-                  new MaterialPageRoute(builder: (context) => CodeLoginPage()))
+              Navigator.pushAndRemoveUntil(context,
+                  new MaterialPageRoute(builder: (context) => CodeLoginPage()), (route) => route == null)
             }
         });
   }
