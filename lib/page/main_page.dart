@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_new/page/main/profile_page.dart';
 import 'package:flutter_app_new/style/app_color.dart';
 import 'package:flutter_app_new/style/font_style.dart';
 
@@ -45,7 +46,7 @@ class _MyHomePageState extends State<MainPage> {
           new HomePage(),
           new GoodsPage(),
           new Text("消息"),
-          new Text("我的")
+          new ProfilePage()
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

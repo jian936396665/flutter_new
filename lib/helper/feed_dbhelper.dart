@@ -39,8 +39,8 @@ class FeedDbHelper{
     List<Map<String, dynamic>> list = await _databaseHelper.query(feed_dbname, sql);
     List<FeedModel> newlist = new List();
     for(int i=0;i<list.length;i++){
-      Cover cover = new Cover(list[i]["content"]);
-      Content content = new Content(cover, list[i]["image_url"]);
+      Cover cover = new Cover(list[i]["image_url"]);
+      Content content = new Content(cover, list[i]["content"]);
       FeedModel model = new FeedModel(content);
       newlist.add(model);
     }
