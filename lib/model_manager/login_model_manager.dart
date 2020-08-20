@@ -1,5 +1,6 @@
 import 'package:flutter_app_new/http/http.dart';
 import 'package:flutter_app_new/model/code_login_model.dart';
+import 'package:flutter_app_new/model/user_info.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginModelManager{
@@ -34,6 +35,21 @@ class LoginModelManager{
     if (result != null) {
       if (200 == result['code']) {
         CodeLoginModel model = new CodeLoginModel.fromJson(new Map<String, dynamic>.from(result));
+        return model;
+      } else {
+        Fluttertoast.showToast(msg: result['message']);
+      }
+    }
+    return null;
+  }
+
+  static Future<UserInfo> getUserInfo() async {
+    var result = await Http.fetch(
+        "user/info",
+        type: "get");
+    if (result != null) {
+      if (200 == result['code']) {
+        UserInfo model = new UserInfo.fromJson(new Map<String, dynamic>.from(result["data"]));
         return model;
       } else {
         Fluttertoast.showToast(msg: result['message']);

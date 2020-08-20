@@ -1,4 +1,7 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_new/model/user_info.dart';
+import 'package:flutter_app_new/model_manager/login_model_manager.dart';
 
 class ProfilePage extends StatefulWidget{
   @override
@@ -7,6 +10,23 @@ class ProfilePage extends StatefulWidget{
   }
 }
 class _ProfileState extends State<ProfilePage>{
+
+  UserInfo userInfo;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadUserInfo();
+  }
+
+  Future<void> _loadUserInfo() async {
+    UserInfo _userinfo = await LoginModelManager.getUserInfo();
+    setState(() {
+      userInfo = _userinfo;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,11 +39,10 @@ class _ProfileState extends State<ProfilePage>{
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Container(
-                  color: Colors.redAccent,
                   width: 80,
                   height: 80,
                   margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
-                  child: Image.network("https://www.baidu.com"),
+                  child: Image.network(userInfo.user_info.user_photo),
                 ),
                 Container(
                   height: 80,
@@ -31,11 +50,11 @@ class _ProfileState extends State<ProfilePage>{
                     children: <Widget>[
                       Align(
                         alignment: Alignment.topLeft,
-                        child: Text("用户名"),
+                        child: Text(userInfo.user_info.user_name),
                       ),
                       Align(
                         alignment: Alignment.bottomLeft,
-                        child: Text("昵称"),
+                        child: Text(TextUtil.isEmpty(userInfo.user_info.signature)?"该用户很懒，没有设置签名":userInfo.user_info.signature),
                       )
                     ],
                   ),

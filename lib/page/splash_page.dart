@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app_new/api/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'login_page.dart';
@@ -23,6 +24,9 @@ class _SplashState extends State with SingleTickerProviderStateMixin{
   @override
   void initState() {
     super.initState();
+
+    Constant.loadToken();
+
     _controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: 2),

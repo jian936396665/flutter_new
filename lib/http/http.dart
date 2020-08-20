@@ -23,6 +23,7 @@ class Http {
   static Future fetch(String url, {Map params, String type = "get"}) async {
     var response;
     url = _addParams(url,params: publicParams);
+    PrintUtil.e(' http publicParams:::' + publicParams.toString());
     if ('get' == type) {
       response = await _get(url, params: params);
     } else if ('post' == type) {
@@ -64,7 +65,7 @@ class Http {
     var startTime = DateTime.now().millisecondsSinceEpoch;
 //    UserData userData = await UserManager.shared.getUserInfo();
 //    String token = userData?.token??"";
-    String token = "";
+    String token = Constant.token;
 //    await UserManager.shared.getToken;
     PrintUtil.selfError("token::" + token);
     final response = await http.get(url, headers: {
@@ -87,12 +88,12 @@ class Http {
 //    url = _addParams(url, params);
     var startTime = DateTime.now().millisecondsSinceEpoch;
 //    UserData userData = await UserManager.shared.getUserInfo();
-//    String token = userData?.token ?? "";
+    String token = Constant.token;
     final response = await http.post(url,
         headers: {
 //          'Accept': 'application/json',
-//          'Content-Type': 'application/json',
-//          'Authorization': "Bearer " + token,
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + token,
         },
         body: params);
     var endTime = DateTime.now().millisecondsSinceEpoch;
