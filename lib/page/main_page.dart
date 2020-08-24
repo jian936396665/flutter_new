@@ -5,6 +5,7 @@ import 'package:flutter_app_new/style/font_style.dart';
 
 import 'main/goods_page.dart';
 import 'main/home_page.dart';
+import 'main/message_page.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key key, this.title}) : super(key: key);
@@ -45,7 +46,7 @@ class _MyHomePageState extends State<MainPage> {
         children: <Widget>[
           new HomePage(),
           new GoodsPage(),
-          new Text("消息"),
+          new MessagePage(),
           new ProfilePage()
         ],
       ),

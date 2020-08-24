@@ -11,11 +11,12 @@ class ProfilePage extends StatefulWidget{
 }
 class _ProfileState extends State<ProfilePage>{
 
-  UserInfo userInfo;
+  String username = "";
+  String sign = "";
+  String user_photo = "";
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loadUserInfo();
   }
@@ -23,7 +24,9 @@ class _ProfileState extends State<ProfilePage>{
   Future<void> _loadUserInfo() async {
     UserInfo _userinfo = await LoginModelManager.getUserInfo();
     setState(() {
-      userInfo = _userinfo;
+      username = _userinfo.user_info.user_name;
+      sign = TextUtil.isEmpty(_userinfo.user_info.signature)?"这个人很懒，没有设置签名": _userinfo.user_info.signature;
+      user_photo = _userinfo.user_info.user_photo;
     });
   }
 
@@ -42,7 +45,7 @@ class _ProfileState extends State<ProfilePage>{
                   width: 80,
                   height: 80,
                   margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
-                  child: Image.network(userInfo.user_info.user_photo),
+                  child: Image.network(user_photo),
                 ),
                 Container(
                   height: 80,
@@ -50,11 +53,11 @@ class _ProfileState extends State<ProfilePage>{
                     children: <Widget>[
                       Align(
                         alignment: Alignment.topLeft,
-                        child: Text(userInfo.user_info.user_name),
+                        child: Text(username),
                       ),
                       Align(
                         alignment: Alignment.bottomLeft,
-                        child: Text(TextUtil.isEmpty(userInfo.user_info.signature)?"该用户很懒，没有设置签名":userInfo.user_info.signature),
+                        child: Text(sign),
                       )
                     ],
                   ),

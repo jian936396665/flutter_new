@@ -70,7 +70,7 @@ class Http {
     PrintUtil.selfError("token::" + token);
     final response = await http.get(url, headers: {
 //      'Accept': 'application/json',
-      'Content-Type': 'application/json',
+//      'Content-Type': 'application/json',
       'Authorization': token,
     });
 
@@ -92,7 +92,7 @@ class Http {
     final response = await http.post(url,
         headers: {
 //          'Accept': 'application/json',
-          'Content-Type': 'application/json',
+//          'Content-Type': 'application/json',
           'Authorization': "Bearer " + token,
         },
         body: params);
