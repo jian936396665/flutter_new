@@ -7,7 +7,10 @@ class FeedDataModel{
       data = new List<FeedModel>();
       new List.from(json['data']).forEach((v) {
         if(v.containsKey("content")){
-          data.add(new FeedModel.fromJson(new Map<String, dynamic>.from(v)));
+          Map<String, dynamic> contentMap = v["content"];
+          if(contentMap.containsKey("cover")) {
+            data.add(new FeedModel.fromJson(new Map<String, dynamic>.from(v)));
+          }
         }
       });
     }
@@ -44,6 +47,10 @@ class Cover{
   Cover(this.thumbnail_url);
 
   Cover.fromJson(Map<String, dynamic> json){
-    thumbnail_url = json["thumbnail_url"];
+    if(json==null){
+      thumbnail_url = "";
+    }else{
+      thumbnail_url = json["thumbnail_url"];
+    }
   }
 }

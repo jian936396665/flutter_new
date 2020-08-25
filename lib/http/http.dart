@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter_app_new/api/api_config.dart';
 import 'package:flutter_app_new/api/constant.dart';
 import 'package:flutter_app_new/util/PrintUtil.dart';
@@ -39,14 +40,6 @@ class Http {
       var result = json.decode(utf8decoder.convert(response.bodyBytes));
       PrintUtil.e(' http result:::' + result.toString());
       return result;
-//      if (200 == result['code']) {
-//        print({'result::': result['data'].toString()});
-//        return result['data'];
-//      } else {
-//        print({'result::': response.toString()});
-//
-////        throw Exception('Failed to load $url ' + result['code'].toString());
-//      }
     } else {
       Fluttertoast.showToast(msg: "网络错误,请检查网络");
 //      throw Exception('Failed to load ' + url);
@@ -57,27 +50,8 @@ class Http {
     if (!url.startsWith("http")) {
       url = Api.API_DOMAIN + url;
     }
-    PrintUtil.selfError("params:::params::" + params.toString());
-
     url = _addParams(url, params: params);
-    PrintUtil.selfError("params:::params::" + url.toString());
-
-    var startTime = DateTime.now().millisecondsSinceEpoch;
-//    UserData userData = await UserManager.shared.getUserInfo();
-//    String token = userData?.token??"";
-    String token = Constant.token;
-//    await UserManager.shared.getToken;
-    PrintUtil.selfError("token::" + token);
-    final response = await http.get(url, headers: {
-//      'Accept': 'application/json',
-//      'Content-Type': 'application/json',
-      'Authorization': token,
-    });
-
-    var endTime = DateTime.now().millisecondsSinceEpoch;
-    PrintUtil.e(
-        {'difTime': endTime - startTime, 'url': url, 'parmas': params ?? null});
-
+    final response = await http.get(url, headers: getDefaultHeader());
     return response;
   }
 
@@ -85,21 +59,9 @@ class Http {
     if (!url.startsWith("http")) {
       url = Api.API_DOMAIN + url;
     }
-//    url = _addParams(url, params);
-    var startTime = DateTime.now().millisecondsSinceEpoch;
-//    UserData userData = await UserManager.shared.getUserInfo();
-    String token = Constant.token;
     final response = await http.post(url,
-        headers: {
-//          'Accept': 'application/json',
-//          'Content-Type': 'application/json',
-          'Authorization': "Bearer " + token,
-        },
+        headers: getDefaultHeader(),
         body: params);
-    var endTime = DateTime.now().millisecondsSinceEpoch;
-
-    PrintUtil.e(
-        {'difTime': endTime - startTime, 'url': url, 'parmas': params ?? null});
 
     return response;
   }
@@ -131,5 +93,14 @@ class Http {
       returnUrl = mainUri + '?' + newSearch.join('&');
       return returnUrl;
     }
+  }
+
+  static Map<String, String> getDefaultHeader(){
+    Map<String, String> header = new Map();
+    String token = Constant.token;
+    if(!TextUtil.isEmpty(token)){
+      header["Authorization"] = "Bearer " + token;
+    }
+    return header;
   }
 }
