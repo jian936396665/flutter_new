@@ -43,6 +43,7 @@ class _SplashState extends State with SingleTickerProviderStateMixin{
 
     Timer.periodic(Duration(seconds: 3), (timer) {
       onAnimalEnd();
+      timer.cancel();
     });
   }
 
