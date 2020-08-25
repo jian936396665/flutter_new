@@ -99,7 +99,9 @@ class Http {
     Map<String, String> header = new Map();
     String token = Constant.token;
     if(!TextUtil.isEmpty(token)){
-      header["Authorization"] = "Bearer " + token;
+      header["Authorization"] =
+//          "Bearer " +
+              token;
     }
     return header;
   }
