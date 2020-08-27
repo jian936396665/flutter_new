@@ -6,7 +6,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 class BasePullToRefreshWidget extends StatefulWidget {
   final RefreshType refreshType;
   final StaggeredGridView staggeredGridView;
-  final RefreshCallback onRefresh;
+  final Function onRefresh;
 
   const BasePullToRefreshWidget(
       {Key key,
@@ -23,6 +23,7 @@ class BasePullToRefreshWidget extends StatefulWidget {
 class _BaseRefreshState extends State<BasePullToRefreshWidget> {
 
   GlobalKey<LoadingDialog> key = GlobalKey();
+  bool dissmissDialog = false;
 
   @override
   void initState() {
@@ -38,7 +39,7 @@ class _BaseRefreshState extends State<BasePullToRefreshWidget> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       child: _item(widget.refreshType),
-      onRefresh: widget.onRefresh,
+      onRefresh: _onRefresh,
     );
   }
 
@@ -59,6 +60,28 @@ class _BaseRefreshState extends State<BasePullToRefreshWidget> {
 
   Widget _buildStaggeredGridViewItem() {
     return widget.staggeredGridView;
+  }
+
+  void _onRefresh(){
+    widget.onRefresh.call();
+    _showDialog();
+  }
+
+  void _showDialog() async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return NetLoadingDialog(key: key, dismissDialog: _dissmissDialog);
+        });
+    dissmissDialog = true;
+  }
+
+  _dissmissDialog(Function func) {
+    if (dissmissDialog) {
+      Navigator.of(context).pop();
+      dissmissDialog = false;
+    }
   }
 
 }

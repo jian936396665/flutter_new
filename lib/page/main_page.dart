@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_new/page/main/profile_page.dart';
 import 'package:flutter_app_new/style/app_color.dart';
 import 'package:flutter_app_new/style/font_style.dart';
+import 'package:flutter_app_new/widget/home_header.dart';
 
 import 'main/goods_page.dart';
 import 'main/home_page.dart';
@@ -44,7 +45,7 @@ class _MyHomePageState extends State<MainPage> {
         onPageChanged: _onPageChange,
         controller: _pageController,
         children: <Widget>[
-          new HomePage(),
+          new HomeHeader(),
           new GoodsPage(),
           new MessagePage(),
           new ProfilePage()
